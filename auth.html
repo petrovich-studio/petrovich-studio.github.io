@@ -3,80 +3,20 @@
 
 <head>
     <meta charset="utf-8">
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="favicon.ico" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="manifest.json" />
     <meta name="author" content="Petrovich">
     <title>Dashboard</title>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js" defer></script>
 </head>
 
 <body id="root" style="display: none;">
-    <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            const firebaseConfig = {
-                apiKey: "AIzaSyCDDL5-aQ7n_guxTzzq9NRTNIebN8bDdpI",
-                authDomain: "petrovichvps.firebaseapp.com",
-                databaseURL: "https://petrovichvps-default-rtdb.firebaseio.com",
-                projectId: "petrovichvps",
-                storageBucket: "petrovichvps.appspot.com",
-                messagingSenderId: "479375587758",
-                appId: "1:479375587758:web:dc223074d457f8725c303f"
-            };
-
-            firebase.initializeApp(firebaseConfig);
-            initApp();
-
-
-        });
-
-        function auth() {
-            if (!firebase.auth().currentUser) {
-                var provider = new firebase.auth.GoogleAuthProvider();
-                provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-                firebase.auth().signInWithPopup(provider).then(function(result) {
-                    var token = result.credential.accessToken;
-                    var user = result.user;
-                    document.getElementById('root').style.display = 'none';
-                    location.replace("./index.html");
-                }).catch(function(error) {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    var email = error.email;
-                    var credential = error.credential;
-                    if (errorCode === 'auth/account-exists-with-different-credential') {
-                        alert('You have already signed up with a different auth provider for that email.');
-                        // If you are using multiple auth providers on your app you should handle linking
-                        // the user's accounts here.
-                    } else {
-                        console.error(error);
-                    }
-                });
-            } else {
-                document.getElementById('root').style.display = 'block';
-            }
-        }
-
-        function initApp() {
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    var displayName = user.displayName;
-                    var email = user.email;
-                    var photoURL = user.photoURL;
-                    var uid = user.uid;
-                    document.getElementById('root').style.display = 'none';
-                    location.replace("./index.html");
-                } else {
-                    document.getElementById('root').style.display = 'block';
-                }
-            });
-        }
-    </script>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -94,14 +34,13 @@
                 </ul>
             </div>
         </div>
-        <form class="d-flex">
-            <button class="btn btn-success" onclick="auth()">
+        <span class="d-flex">
+            <button class="btn btn-success" onclick="authgoogle();">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
                     <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
                 </svg>&nbsp;Войти
             </button>
-        </form>
-
+        </span>
     </nav>
     <br />
     <div class="row">
@@ -109,6 +48,78 @@
 
         </div>
     </div>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCDDL5-aQ7n_guxTzzq9NRTNIebN8bDdpI",
+                authDomain: "petrovichvps.firebaseapp.com",
+                databaseURL: "https://petrovichvps-default-rtdb.firebaseio.com",
+                projectId: "petrovichvps",
+                storageBucket: "petrovichvps.appspot.com",
+                messagingSenderId: "479375587758",
+                appId: "1:479375587758:web:dc223074d457f8725c303f"
+            };
+
+            firebase.initializeApp(firebaseConfig);
+            initApp();
+        });
+
+        function initApp() {
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    var displayName = user.displayName;
+                    var email = user.email;
+                    var photoURL = user.photoURL;
+                    var uid = user.uid;
+                    document.getElementById('root').style.display = 'none';
+                    location.replace("./index.html");
+                } else {
+                    document.getElementById('root').style.display = 'block';
+                }
+            });
+        }
+
+        function authgoogle() {
+            if (!firebase.auth().currentUser) {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                firebase.auth().signInWithPopup(provider)
+                    .then(function(result) {
+                        var token = result.credential.accessToken;
+                        var user = result.user;
+                        document.getElementById('root').style.display = 'none';
+                        location.replace("./index.html");
+                    })
+                    .catch(function(error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        var email = error.email;
+                        var credential = error.credential;
+                        if (errorCode === 'auth/account-exists-with-different-credential') {
+                            alert('You have already signed up with a different auth provider for that email.');
+                        } else {
+                            console.error(error);
+                        }
+                    });
+            } else {
+                document.getElementById('root').style.display = 'block';
+            }
+        }
+
+
+        function logout() {
+            firebase.auth().signOut()
+                .then(function() {
+                    // Sign-out successful.
+                    document.getElementById('root').style.display = 'none';
+                    location.replace("./auth.html");
+                }).catch(function(error) {
+                    // An error happened.
+                    document.getElementById('root').style.display = 'block';
+                });
+        }
+    </script>
+
 
 </body>
 
