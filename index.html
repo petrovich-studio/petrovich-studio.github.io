@@ -18,8 +18,9 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
+            <img src="" id="dropdownMenuLink" width="32" height="32" style="border-radius: 15px;">
             <a href="#" class="navbar-brand">
-                <img src="" id="userpic" width="24" height="24" style="border-radius: 10px;"> chatApp
+                chatApp
                 <button class="btn btn-danger" id="logoutbtn">Выйти</button>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false">
@@ -28,13 +29,16 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav mr-auto ml-auto">
                     <li class="nav-item">
-                        <a href="" class="nav-link">Home</a>
+                        <a href="" class="nav-link">Профиль</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">Blog</a>
+                        <a href="" class="nav-link">Контакты</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">Contacts</a>
+                        <a href="" class="nav-link">Сообщения</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link">Группы</a>
                     </li>
                 </ul>
             </div>
@@ -64,7 +68,7 @@
                     var email = user.email;
                     var photoURL = user.photoURL;
                     var uid = user.uid;
-                    document.getElementById('userpic').src = photoURL;
+                    document.getElementById('dropdownMenuLink').src = photoURL;
                     document.getElementById('root').style.display = 'block';
                 } else {
                     document.getElementById('root').style.display = 'none';

@@ -1,7 +1,7 @@
 {
     "name": "chatApp",
-    "short_name": "Space Chat App",
-    "description": "VPS Messanger",
+    "short_name": "chatApp",
+    "description": "chatApp",
     "lang": "ru-RU",
     "start_url": "/",
     "display": "fullscreen",
