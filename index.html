@@ -54,6 +54,7 @@
           </svg>
     </button>
     </form>
+    <div class="alert alert-info" id="userstatus"></div>
 
     <script>
         window.addEventListener("DOMContentLoaded", () => {
@@ -82,13 +83,14 @@
                     var children = dbRef.child('users').child(uid)
                     children.on('value', (snapshot) => {
                         if (snapshot.exists()) {
-                            console.log(snapshot.val());
+                            document.getElementById('userstatus').innerText = snapshot.val().status;
                         } else {
                             console.log("No data available in profile");
                             firebase.database().ref('users/' + user.uid).set({
                                 email: email,
                                 displayName: displayName,
-                                photoURL: photoURL
+                                photoURL: photoURL,
+                                status: ''
                             }).then(() => {
                                 console.log('Write Profile!!!');
                             }).catch(() => {
