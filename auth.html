@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-database.js" defer></script>
     <script src="./sw.js"></script>
 </head>
 
@@ -83,6 +84,24 @@
                     .then(function(result) {
                         var token = result.credential.accessToken;
                         var user = result.user;
+                        const dbRef = firebase.database().ref();
+                        var children = dbRef.child('users').child(user.uid)
+                        children.on('value', (snapshot) => {
+                            if (snapshot.exists()) {
+                                console.log(snapshot.val());
+                            } else {
+                                console.log("No data available");
+                                firebase.database().ref('users/' + user.uid).set({
+                                    email: user.email,
+                                    username: user.displayName,
+                                    photoURL: user.photoURL
+                                }).then(() => {
+                                    console.log('Write Profile!!!');
+                                }).catch(() => {
+                                    console.log('Error write Profile!!!');
+                                });
+                            }
+                        });
                         document.getElementById('root').style.display = 'none';
                         location.replace("./index.html");
                     })
