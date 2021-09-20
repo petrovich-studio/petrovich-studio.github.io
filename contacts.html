@@ -46,8 +46,10 @@
         </div>
     </nav>
 
-    <img src="" id="userpic" style="border-radius: 15px;"><br> Имя: <span class="badge bg-light" id="dname"></span><br> Email: <span class="badge bg-light" id="mail"></span><br>
-
+    <form class="d-flex">
+        <input type="text" id="search" class="form-control" placeholder="Имя или email...">
+        <button class="btn btn-outline-success">Найти</button>
+    </form>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             const firebaseConfig = {
@@ -62,6 +64,7 @@
 
             firebase.initializeApp(firebaseConfig);
             initApp();
+
         });
 
         function initApp() {
@@ -90,9 +93,6 @@
                         }
                     });
                     document.getElementById('dropdownMenuLink').src = photoURL;
-                    document.getElementById('userpic').src = photoURL;
-                    document.getElementById('dname').innerText = displayName;
-                    document.getElementById('mail').innerText = email;
                     document.getElementById('root').style.display = 'block';
                 } else {
                     document.getElementById('root').style.display = 'none';
