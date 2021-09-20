@@ -46,9 +46,7 @@
         </div>
     </nav>
 
-    <img src="" id="userpic" style="border-radius: 15px;"><br>
-    <span class="badge bg-light" id="dname"></span><br>
-    <span class="badge bg-light" id="mail"></span><br>
+    <img src="" id="userpic" style="border-radius: 15px;"><br> Имя: <span class="badge bg-light" id="dname"></span><br> Email: <span class="badge bg-light" id="mail"></span><br>
 
     <script>
         window.addEventListener("DOMContentLoaded", () => {
@@ -73,6 +71,24 @@
                     var email = user.email;
                     var photoURL = user.photoURL;
                     var uid = user.uid;
+                    const dbRef = firebase.database().ref();
+                    var children = dbRef.child('users').child(uid)
+                    children.on('value', (snapshot) => {
+                        if (snapshot.exists()) {
+                            console.log(snapshot.val());
+                        } else {
+                            console.log("No data available in profile");
+                            firebase.database().ref('users/' + user.uid).set({
+                                email: email,
+                                displayName: displayName,
+                                photoURL: photoURL
+                            }).then(() => {
+                                console.log('Write Profile!!!');
+                            }).catch(() => {
+                                console.log('Error write Profile!!!');
+                            });
+                        }
+                    });
                     document.getElementById('dropdownMenuLink').src = photoURL;
                     document.getElementById('userpic').src = photoURL;
                     document.getElementById('dname').innerText = displayName;

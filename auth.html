@@ -84,24 +84,7 @@
                     .then(function(result) {
                         var token = result.credential.accessToken;
                         var user = result.user;
-                        const dbRef = firebase.database().ref();
-                        var children = dbRef.child('users').child(user.uid)
-                        children.on('value', (snapshot) => {
-                            if (snapshot.exists()) {
-                                console.log(snapshot.val());
-                            } else {
-                                console.log("No data available");
-                                firebase.database().ref('users/' + user.uid).set({
-                                    email: user.email,
-                                    username: user.displayName,
-                                    photoURL: user.photoURL
-                                }).then(() => {
-                                    console.log('Write Profile!!!');
-                                }).catch(() => {
-                                    console.log('Error write Profile!!!');
-                                });
-                            }
-                        });
+
                         document.getElementById('root').style.display = 'none';
                         location.replace("./index.html");
                     })
