@@ -45,6 +45,10 @@
         </div>
     </nav>
 
+    <img src="" id="userpic" style="border-radius: 15px;"><br>
+    <span class="badge bg-light" id="dname"></span><br>
+    <span class="badge bg-light" id="mail"></span><br>
+
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             const firebaseConfig = {
@@ -69,6 +73,9 @@
                     var photoURL = user.photoURL;
                     var uid = user.uid;
                     document.getElementById('dropdownMenuLink').src = photoURL;
+                    document.getElementById('userpic').src = photoURL;
+                    document.getElementById('dname').innerText = displayName;
+                    document.getElementById('mail').innerText = email;
                     document.getElementById('root').style.display = 'block';
                 } else {
                     document.getElementById('root').style.display = 'none';
