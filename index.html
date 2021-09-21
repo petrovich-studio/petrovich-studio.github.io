@@ -16,7 +16,6 @@
 </head>
 
 <body id="root" style="display: none;">
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <img src="" id="dropdownMenuLink" width="32" height="32" style="border-radius: 15px;">
@@ -56,7 +55,6 @@
     </form>
     <br />
     <div class="alert alert-info" id="userstatus"></div>
-
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             const firebaseConfig = {
@@ -151,7 +149,6 @@
             }
         }
 
-
         function logout() {
             firebase.auth().signOut()
                 .then(function() {
@@ -164,7 +161,6 @@
                 });
         }
     </script>
-
 
 </body>
 
