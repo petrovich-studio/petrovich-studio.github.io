@@ -108,7 +108,7 @@
                             d.val().displayName + '<br />Email: ' +
                             d.val().email +
                             '<br /><button class="btn btn-outline-danger" onclick="delcontact(\'' +
-                            d.key + '\');">Удалить</button></div>');
+                            d.key + '\');">Удалить</button><button class="btn btn-secondary">Написать</button></div>');
                     })
                 })
             })
@@ -153,6 +153,7 @@
                             });
                         }
                     });
+                    getcontacts();
                     document.getElementById('dropdownMenuLink').src = photoURL;
                     document.getElementById('root').style.display = 'block';
                 } else {
