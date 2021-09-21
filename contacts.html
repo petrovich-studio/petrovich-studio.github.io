@@ -107,7 +107,8 @@
                             d.val().photoURL + '" style="float: left; border-radius: 15px;">Имя: ' +
                             d.val().displayName + '<br />Email: ' +
                             d.val().email +
-                            '<br /><button class="btn btn-outline-danger" onclick="delcontact(\'' +
+                            '<br /><span class="badge bg-primary">' +
+                            d.val().status + '</span><br /><button class="btn btn-outline-danger" onclick="delcontact(\'' +
                             d.key + '\');">Удалить</button><button class="btn btn-secondary">Написать</button></div>');
                     })
                 })
