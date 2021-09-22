@@ -17,7 +17,8 @@ var cache_urls = [
     '/index.html',
     '/offline.html',
     '/manifest.json',
-    '/icons/user.svg'
+    '/icons/user.svg',
+    '/sw.js'
 ];
 
 self.addEventListener('install', function(event) {
