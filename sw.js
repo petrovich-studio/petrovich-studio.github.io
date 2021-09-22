@@ -30,3 +30,16 @@ self.addEventListener('fetch', function(event) {
         })
     );
 })
+let deferredPrompt;
+self.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallPromotion();
+    console.log(`'beforeinstallprompt' event was fired.`);
+});
+
+self.addEventListener('appinstalled', () => {
+    hideInstallPromotion();
+    deferredPrompt = null;
+    console.log('PWA was installed');
+});
