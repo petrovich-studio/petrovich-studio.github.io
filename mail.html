@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="viewport" content="width=device-width,  initial-scale=1, user-scalable=no">
     <meta name="author" content="Petrovich">
     <title>chatApp</title>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -52,19 +52,21 @@
         </div>
     </nav>
     <div id="inbox">
-        <button class="btn btn-info" onclick="outbox();">Исходящие</button><button class="btn btn-info" onclick="inbox();">Входящие</button><br />Входящие сообщения
+        <button class="btn btn-info" onclick="outbox();">Исходящие</button>
+        <button class="btn btn-info" onclick="inbox();">Входящие</button><br />
         <div id="inblist"></div>
     </div>
     <div id="outbox">
-        <button class="btn btn-info" onclick="outbox();">Исходящие</button><button class="btn btn-info" onclick="inbox();">Входящие</button><br />Исходящие сообщения
+        <button class="btn btn-info" onclick="outbox();">Исходящие</button>
+        <button class="btn btn-info" onclick="inbox();">Входящие</button><br />
         <div id="outlist"></div>
     </div>
     <div id="newmail">
-        <button class="btn btn-info" onclick="inbox();">Входящие</button>
         <button class="btn btn-info" onclick="outbox();">Исходящие</button>
-        <br />Новое сообщение для <span class="badge bg-info">
-            <span id="toname"></span>(<span id="tomail"></span>
-        </span>)<br />
+        <button class="btn btn-info" onclick="inbox();">Входящие</button>
+        <br />Новое сообщение для<br /><span class="badge bg-info">
+            <span id="toname"></span><br />(<span id="tomail"></span>)
+        </span><br />
         <textarea id="mailtext" class="form-control" maxlength="1024"></textarea>
         <button class="btn btn-primary" onclick="sendmail();">Отправить</button>
     </div>
@@ -134,9 +136,10 @@
                                 $('#inblist').append('<div class="alert alert-info">' +
                                     'От: <span class="badge bg-primary">' +
                                     udata.displayName +
-                                    '&nbsp;(' + udata.email + ')</span><br />' + res.val().body +
+                                    '<br />(' + udata.email + ')</span><br />' + res.val().body +
                                     '<br /><span class="badge bg-secondary">' +
-                                    res.val().timestamp + '</span></div>');
+                                    res.val().timestamp + '</span><a href="./mail.html?new=' +
+                                    res.val().sender + '" class="badge bg-warning">Ответить</a></div>');
                             }
                         })
                         document.getElementById('inbox').style.display = 'block';
@@ -150,16 +153,17 @@
             document.getElementById('outlist').innerText = '';
             firebase.database().ref('mail').orderByChild('sender')
                 .equalTo(firebase.auth().currentUser.uid).once('value', (list) => {
-                    list.forEach(function(res) {
-                        firebase.database().ref('users/').child(res.val().receiver).once('value', (snapshot) => {
-                            if (snapshot.exists()) {
-                                const udata = snapshot.val();
-                                $('#inblist').append('<div class="alert alert-info">' +
+                    list.forEach(function(resp) {
+                        firebase.database().ref('users/').child(resp.val().receiver).once('value', (snap) => {
+                            if (snap.exists()) {
+                                const usdata = snap.val();
+                                $('#outlist').append('<div class="alert alert-info">' +
                                     'Кому: <span class="badge bg-primary">' +
-                                    udata.displayName +
-                                    '&nbsp;(' + udata.email + ')</span><br />' + res.val().body +
+                                    usdata.displayName +
+                                    '<br />(' + usdata.email + ')</span><br />' + resp.val().body +
                                     '<br /><span class="badge bg-secondary">' +
-                                    res.val().timestamp + '</span></div>');
+                                    resp.val().timestamp + '</span><a href="./mail.html?new=' +
+                                    resp.val().receiver + '" class="badge bg-warning">Отправить ещё</a></div>');
                             }
                         })
                         document.getElementById('inbox').style.display = 'none';
