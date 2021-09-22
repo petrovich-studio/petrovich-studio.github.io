@@ -9,6 +9,8 @@
     "theme_color": "#E6E6FA",
     "background_color": "#E6E6FA",
     "orientation": "portrait",
+    "related_applications": [],
+    "prefer_related_applications": false,
 
     "icons": [{
             "src": "\/icons/wcls-logo-512.png",
