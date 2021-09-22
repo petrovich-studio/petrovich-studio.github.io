@@ -1,19 +1,41 @@
+var CACHE_NAME = 'petrovich';
+var cache_urls = [
+    '/',
+    '/js/',
+    '/css/',
+    '/icons/',
+    '/js/jquery-3.5.1.slim.min.js',
+    '/js/bootstrap.bundle.min.js',
+    '/js/firebase-app.js',
+    '/js/firebase-auth.js',
+    '/js/firebase-database.js',
+    '/css/bootstrap.min.css',
+    '/auth.html',
+    '/contacts.html',
+    '/groups.html',
+    '/mail.html',
+    '/index.html',
+    '/offline.html',
+    '/manifest.json',
+    '/icons/user.svg'
+];
+
 self.addEventListener('install', function(event) {
     var indexPage = new Request('index.html');
     event.waitUntil(
         fetch(indexPage).then(function(response) {
-            return caches.open('pwabuilder-offline').then(function(cache) {
+            return caches.open(CACHE_NAME).then(function(cache) {
                 console.log('[PWA Builder] Cached index page during Install' + response.url);
-                return cache.put(indexPage, response);
+                return cache.addAll(indexPage, response, cache_urls);
             });
         }));
 });
 self.addEventListener('fetch', function(event) {
     var updateCache = function(request) {
-        return caches.open('pwabuilder-offline').then(function(cache) {
+        return caches.open(CACHE_NAME).then(function(cache) {
             return fetch(request).then(function(response) {
                 console.log('[PWA Builder] add page to offline' + response.url)
-                return cache.put(request, response);
+                return cache.addAll(request, response, cache_urls);
             });
         });
     };
@@ -21,7 +43,7 @@ self.addEventListener('fetch', function(event) {
     event.respondWith(
         fetch(event.request).catch(function(error) {
             console.log('[PWA Builder] Network request Failed. Serving content from cache: ' + error);
-            return caches.open('pwabuilder-offline').then(function(cache) {
+            return caches.open(CACHE_NAME).then(function(cache) {
                 return cache.match(event.request).then(function(matching) {
                     var report = !matching || matching.status == 404 ? Promise.reject('no-match') : matching;
                     return report
@@ -29,17 +51,16 @@ self.addEventListener('fetch', function(event) {
             });
         })
     );
-})
-let deferredPrompt;
-self.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    showInstallPromotion();
-    console.log(`'beforeinstallprompt' event was fired.`);
 });
-
-self.addEventListener('appinstalled', () => {
-    hideInstallPromotion();
-    deferredPrompt = null;
-    console.log('PWA was installed');
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+        caches
+        .match(event.request)
+        .then(function(response) {
+            return response || fetch(event.request);
+        })
+        .catch(function() {
+            return caches.match('/offline.html');
+        }),
+    );
 });
