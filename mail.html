@@ -16,7 +16,13 @@
 </head>
 
 <body id="root" style="display: none;">
-
+    <style>
+        #inbox,
+        #outbox,
+        #newmail {
+            display: none;
+        }
+    </style>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <img src="" id="dropdownMenuLink" width="32" height="32" style="border-radius: 15px;">
@@ -45,7 +51,23 @@
             </div>
         </div>
     </nav>
-
+    <div id="inbox">
+        <button class="btn btn-info" onclick="outbox();">Исходящие</button><button class="btn btn-info" onclick="inbox();">Входящие</button><br />Входящие сообщения
+        <div id="inblist"></div>
+    </div>
+    <div id="outbox">
+        <button class="btn btn-info" onclick="outbox();">Исходящие</button><button class="btn btn-info" onclick="inbox();">Входящие</button><br />Исходящие сообщения
+        <div id="outlist"></div>
+    </div>
+    <div id="newmail">
+        <button class="btn btn-info" onclick="inbox();">Входящие</button>
+        <button class="btn btn-info" onclick="outbox();">Исходящие</button>
+        <br />Новое сообщение для <span class="badge bg-info">
+            <span id="toname"></span>(<span id="tomail"></span>
+        </span>)<br />
+        <textarea id="mailtext" class="form-control" maxlength="1024"></textarea>
+        <button class="btn btn-primary" onclick="sendmail();">Отправить</button>
+    </div>
 
 
     <script>
@@ -62,7 +84,90 @@
 
             firebase.initializeApp(firebaseConfig);
             initApp();
+            if (window.location.search.substr(0, 5) == '?new=')
+                newmail(window.location.search.split('?new=').join(''));
+            else {
+                document.getElementById('inbox').style.display = 'block';
+                document.getElementById('outbox').style.display = 'none';
+                document.getElementById('newmail').style.display = 'none';
+            }
         });
+
+        function sendmail() {
+            const id = window.location.search.split('?new=').join('');
+            firebase.database().ref().child('mail').push({
+                sender: firebase.auth().currentUser.uid,
+                receiver: id,
+                body: document.getElementById('mailtext').value,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                document.getElementById('mailtext').value = '';
+                inbox();
+            }).catch(() => {
+                alert('Ошибка при отправке сообщения.');
+            })
+        }
+
+        function newmail(id) {
+            firebase.database().ref('users/').child(id).once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    document.getElementById('toname').innerText = snapshot.val().displayName;
+                    document.getElementById('tomail').innerText = snapshot.val().email;
+                    document.getElementById('inbox').style.display = 'none';
+                    document.getElementById('outbox').style.display = 'none';
+                    document.getElementById('newmail').style.display = 'block';
+                } else {
+                    alert('Пользователь не найден!');
+                    inbox();
+                }
+            })
+        }
+
+        function inbox() {
+            document.getElementById('inblist').innerText = '';
+            firebase.database().ref('mail').orderByChild('receiver')
+                .equalTo(firebase.auth().currentUser.uid).once('value', (list) => {
+                    list.forEach(function(res) {
+                        firebase.database().ref('users/').child(res.val().sender).once('value', (snapshot) => {
+                            if (snapshot.exists()) {
+                                const udata = snapshot.val();
+                                $('#inblist').append('<div class="alert alert-info">' +
+                                    'От: <span class="badge bg-primary">' +
+                                    udata.displayName +
+                                    '&nbsp;(' + udata.email + ')</span><br />' + res.val().body +
+                                    '<br /><span class="badge bg-secondary">' +
+                                    res.val().timestamp + '</span></div>');
+                            }
+                        })
+                        document.getElementById('inbox').style.display = 'block';
+                        document.getElementById('outbox').style.display = 'none';
+                        document.getElementById('newmail').style.display = 'none';
+                    })
+                })
+        }
+
+        function outbox() {
+            document.getElementById('outlist').innerText = '';
+            firebase.database().ref('mail').orderByChild('sender')
+                .equalTo(firebase.auth().currentUser.uid).once('value', (list) => {
+                    list.forEach(function(res) {
+                        firebase.database().ref('users/').child(res.val().receiver).once('value', (snapshot) => {
+                            if (snapshot.exists()) {
+                                const udata = snapshot.val();
+                                $('#inblist').append('<div class="alert alert-info">' +
+                                    'Кому: <span class="badge bg-primary">' +
+                                    udata.displayName +
+                                    '&nbsp;(' + udata.email + ')</span><br />' + res.val().body +
+                                    '<br /><span class="badge bg-secondary">' +
+                                    res.val().timestamp + '</span></div>');
+                            }
+                        })
+                        document.getElementById('inbox').style.display = 'none';
+                        document.getElementById('outbox').style.display = 'block';
+                        document.getElementById('newmail').style.display = 'none';
+                    })
+                })
+        }
 
         function initApp() {
             firebase.auth().onAuthStateChanged(function(user) {

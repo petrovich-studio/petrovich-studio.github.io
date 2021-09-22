@@ -109,7 +109,8 @@
                             d.val().email +
                             '<br /><span class="badge bg-primary">' +
                             d.val().status + '</span><br /><button class="btn btn-outline-danger" onclick="delcontact(\'' +
-                            d.key + '\');">Удалить</button><button class="btn btn-secondary">Написать</button></div>');
+                            d.key + '\');">Удалить</button><a href="./mail.html?new=' +
+                            d.key + '" class="btn btn-secondary">Написать</button></a>');
                     })
                 })
             })
