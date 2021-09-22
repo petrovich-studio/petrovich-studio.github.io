@@ -12,9 +12,6 @@
     <script src="./js/jquery-3.5.1.slim.min.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <script src="./js/firebase-app.js" defer></script>
-    <script src="./js/firebase-auth.js" defer></script>
-    <script src="./js/firebase-database.js" defer></script>
     <script src="./sw.js"></script>
 </head>
 
@@ -32,78 +29,6 @@
             <a href="./" class="btn btn-success">Попробовать снова</a>
         </div>
     </div>
-
-    <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            const firebaseConfig = {
-                apiKey: "AIzaSyCDDL5-aQ7n_guxTzzq9NRTNIebN8bDdpI",
-                authDomain: "petrovichvps.firebaseapp.com",
-                databaseURL: "https://petrovichvps-default-rtdb.firebaseio.com",
-                projectId: "petrovichvps",
-                storageBucket: "petrovichvps.appspot.com",
-                messagingSenderId: "479375587758",
-                appId: "1:479375587758:web:dc223074d457f8725c303f"
-            };
-
-            firebase.initializeApp(firebaseConfig);
-            initApp();
-        });
-
-        function initApp() {
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    var displayName = user.displayName;
-                    var email = user.email;
-                    var photoURL = user.photoURL;
-                    var uid = user.uid;
-                    document.getElementById('root').style.display = 'none';
-                    location.replace("./");
-                } else {
-                    document.getElementById('root').style.display = 'block';
-                }
-            });
-        }
-
-        function authgoogle() {
-            if (!firebase.auth().currentUser) {
-                var provider = new firebase.auth.GoogleAuthProvider();
-                firebase.auth().signInWithPopup(provider)
-                    .then(function(result) {
-                        var token = result.credential.accessToken;
-                        var user = result.user;
-
-                        document.getElementById('root').style.display = 'none';
-                        location.replace("./index.html");
-                    })
-                    .catch(function(error) {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        var email = error.email;
-                        var credential = error.credential;
-                        if (errorCode === 'auth/account-exists-with-different-credential') {
-                            alert('You have already signed up with a different auth provider for that email.');
-                        } else {
-                            console.error(error);
-                        }
-                    });
-            } else {
-                document.getElementById('root').style.display = 'block';
-            }
-        }
-
-
-        function logout() {
-            firebase.auth().signOut()
-                .then(function() {
-                    // Sign-out successful.
-                    document.getElementById('root').style.display = 'none';
-                    location.replace("./auth.html");
-                }).catch(function(error) {
-                    // An error happened.
-                    document.getElementById('root').style.display = 'block';
-                });
-        }
-    </script>
 
 
 </body>
