@@ -104,7 +104,7 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             }).then(() => {
                 document.getElementById('mailtext').value = '';
-                inbox();
+                outbox();
             }).catch(() => {
                 alert('Ошибка при отправке сообщения.');
             })
