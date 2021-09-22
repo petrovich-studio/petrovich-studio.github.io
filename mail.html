@@ -162,7 +162,7 @@
                                     usdata.displayName +
                                     '<br />(' + usdata.email + ')</span><br />' + resp.val().body +
                                     '<br /><span class="small bg-light">' +
-                                    Date(resp.val().timestamp).toLocaleString + '</span><a href="./mail.html?new=' +
+                                    Date(resp.val().timestamp).toLocaleString() + '</span><a href="./mail.html?new=' +
                                     resp.val().receiver + '" class="badge bg-warning">Отправить ещё</a></div>');
                             }
                         })
